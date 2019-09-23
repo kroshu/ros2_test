@@ -26,6 +26,7 @@ env:
     - ROS_REPO=ros
     - CCACHE_DIR=$HOME/.ccache # enables C/C++ caching in industrial_ci
     - BUILDER='colcon'
+    - DEBUG_BASH='true'
   matrix: # each line is a job
   #  - ROS_DISTRO='kinetic'
     - ROS_DISTRO='dashing'
