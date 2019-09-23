@@ -24,13 +24,13 @@ include_directories(
   ${rclcpp_INCLUDE_DIRS})
 
 
-add_executable(subscriber_lambda lambda.cpp)
+add_executable(subscriber_lambda src/lambda.cpp)
 ament_target_dependencies(subscriber_lambda rclcpp rclcpp_lifecycle std_msgs)
 
-add_executable(subscriber_member_function member_function.cpp)
+add_executable(subscriber_member_function src/member_function.cpp)
 ament_target_dependencies(subscriber_member_function rclcpp std_msgs)
 
-add_executable(subscriber_not_composable not_composable.cpp)
+add_executable(subscriber_not_composable src/not_composable.cpp)
 ament_target_dependencies(subscriber_not_composable rclcpp std_msgs)
 
 if(BUILD_TESTING)
