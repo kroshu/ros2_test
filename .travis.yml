@@ -32,9 +32,9 @@ env:
     - ROS_DISTRO='dashing'
     - ROS_DISTRO='dashing' CLANG_FORMAT_CHECK=file
 
-addons:
-  sonarcloud:
-    organization: kroshu
+#addons:
+#  sonarcloud:
+#    organization: kroshu
 
 notifications:
   email: false

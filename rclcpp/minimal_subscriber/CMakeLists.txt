@@ -78,5 +78,6 @@ if(TEST_COVERAGE)
 	# Define a coverage target with some libs and executables to check
 	#	NAME 	Name of coverage target. Default: coverage. Only works with default currently.
 	#	TARGETS Library and executable targets for which coverage reports are requested.
-	add_coverage_gcov(NAME coverage)
+	add_coverage_gcov(NAME coverage
+					  TARGETS subscriber_lambda)
 endif()
