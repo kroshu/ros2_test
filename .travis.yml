@@ -26,7 +26,7 @@ env:
     - ROS_REPO=ros
     - CCACHE_DIR=$HOME/.ccache # enables C/C++ caching in industrial_ci
     - BUILDER='colcon'
-    - DEBUG_BASH='true'
+    #- DEBUG_BASH='true'
     - SONARQUBE='true'
     - TARGET_CMAKE_ARGS='-DTEST_COVERAGE=true'
   matrix: # each line is a job
