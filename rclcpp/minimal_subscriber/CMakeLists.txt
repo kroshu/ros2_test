@@ -13,15 +13,38 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
 
-add_executable(subscriber_lambda lambda.cpp)
-ament_target_dependencies(subscriber_lambda rclcpp std_msgs)
+include_directories(
+  include
+  ${std_msgs_INCLUDE_DIRS}
+  ${lifecycle_msgs_INCLUDE_DIRS}
+  ${rclcpp_lifecycle_INCLUDE_DIRS}
+  ${rclcpp_INCLUDE_DIRS})
 
-add_executable(subscriber_member_function member_function.cpp)
+
+add_executable(subscriber_lambda src/lambda.cpp)
+ament_target_dependencies(subscriber_lambda rclcpp rclcpp_lifecycle std_msgs)
+
+add_executable(subscriber_member_function src/member_function.cpp)
 ament_target_dependencies(subscriber_member_function rclcpp std_msgs)
 
-add_executable(subscriber_not_composable not_composable.cpp)
+add_executable(subscriber_not_composable src/not_composable.cpp)
 ament_target_dependencies(subscriber_not_composable rclcpp std_msgs)
+
+if(BUILD_TESTING)
+
+  find_package(ament_cmake_pytest REQUIRED)
+  find_package(launch_testing_ament_cmake REQUIRED)
+  
+  add_launch_test(
+    "test/test_subscriber.test.py"
+    TARGET subscriber_lambda
+    WORKING_DIRECTORY "$<TARGET_FILE_DIR:subscriber_lambda>"
+    TIMEOUT 10
+  )
+endif()
 
 install(TARGETS
   subscriber_lambda
@@ -30,3 +53,31 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
+
+
+###################
+## Test coverage ##
+###################
+
+# Add option for generation of test coverage reports
+OPTION(TEST_COVERAGE "Generate test coverage reports upon testing." OFF)
+
+if(TEST_COVERAGE)
+	# Set build type to debug to avoid compiler optimization when checking coverage
+	set(CMAKE_BUILD_TYPE Debug)
+	# Include coverage report related functions
+	list(APPEND CMAKE_MODULE_PATH "/usr/lib/cmake/CodeCoverage")
+	include(CodeCoverage)
+	# Append compiler flags to gcc for generating coverage notes
+	APPEND_COVERAGE_COMPILER_FLAGS()
+	# Set coverage output dir to ${CMAKE_BINARY_DIR}/test_coverage
+	SET_COVERAGE_OUTPUT_DIR()
+endif()
+
+if(TEST_COVERAGE)
+	# Define a coverage target with some libs and executables to check
+	#	NAME 	Name of coverage target. Default: coverage. Only works with default currently.
+	#	TARGETS Library and executable targets for which coverage reports are requested.
+	add_coverage_gcov(NAME coverage
+					  TARGETS subscriber_lambda)
+endif()

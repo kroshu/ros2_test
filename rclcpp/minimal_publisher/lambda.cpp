@@ -38,7 +38,7 @@ public:
         RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
         this->publisher_->publish(message);
       };
-    timer_ = this->create_wall_timer(500ms, timer_callback);
+    timer_ = this->create_wall_timer(1000ms, timer_callback);
   }
 
 private:
@@ -49,6 +49,7 @@ private:
 
 int main(int argc, char * argv[])
 {
+  setvbuf(stdout, NULL, _IONBF, BUFSIZ);
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<MinimalPublisher>());
   rclcpp::shutdown();
