@@ -66,8 +66,8 @@ set(SONARQUBE_PACKAGES_FILE "none" CACHE STRING "Path to the file that contains 
 set(TEST_COVERAGE_PACKAGES_FILE "none" CACHE STRING "Path to the file that contains the package names to generate coverage reports for.")
 OPTION(TEST_COVERAGE "Generate test coverage reports for SonarQube upon testing." OFF)
 
-if(NOT ${SONARQUBE_SOURCE_DIRS_FILE} MATCHES "none")
-  file(APPEND ${SONARQUBE_SOURCE_DIRS_FILE} "${PROJECT_NAME};${PROJECT_SOURCE_DIR} ")
+if(NOT ${SONARQUBE_PACKAGES_FILE} MATCHES "none")
+  file(APPEND ${SONARQUBE_PACKAGES_FILE} "${PROJECT_NAME};${PROJECT_SOURCE_DIR} ")
 endif()
 
 if(NOT ${TEST_COVERAGE_PACKAGES_FILE} MATCHES "none")
