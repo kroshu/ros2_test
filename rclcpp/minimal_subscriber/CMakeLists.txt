@@ -68,6 +68,7 @@ OPTION(TEST_COVERAGE "Generate test coverage reports for SonarQube upon testing.
 
 if(NOT ${SONARQUBE_PACKAGES_FILE} MATCHES "none")
   file(APPEND ${SONARQUBE_PACKAGES_FILE} "${PROJECT_NAME};${PROJECT_SOURCE_DIR} ")
+  message(${SONARQUBE_PACKAGES_FILE})
 endif()
 
 if(NOT ${TEST_COVERAGE_PACKAGES_FILE} MATCHES "none")
