@@ -55,29 +55,41 @@ install(TARGETS
 ament_package()
 
 
-###################
-## Test coverage ##
-###################
+######################
+## Project analysis ##
+######################
 
-# Add option for generation of test coverage reports
-OPTION(TEST_COVERAGE "Generate test coverage reports upon testing." OFF)
 
-if(TEST_COVERAGE)
-	# Set build type to debug to avoid compiler optimization when checking coverage
-	set(CMAKE_BUILD_TYPE Debug)
-	# Include coverage report related functions
-	list(APPEND CMAKE_MODULE_PATH "/usr/lib/cmake/CodeCoverage")
-	include(CodeCoverage)
-	# Append compiler flags to gcc for generating coverage notes
-	APPEND_COVERAGE_COMPILER_FLAGS()
-	# Set coverage output dir to ${CMAKE_BINARY_DIR}/test_coverage
-	SET_COVERAGE_OUTPUT_DIR()
+
+# Addinional options for project analysis
+set(SONARQUBE_PACKAGES_FILE "none" CACHE STRING "Path to the file that contains the package source directories for SonarQube.")
+set(TEST_COVERAGE_PACKAGES_FILE "none" CACHE STRING "Path to the file that contains the package names to generate coverage reports for.")
+OPTION(TEST_COVERAGE "Generate test coverage reports for SonarQube upon testing." OFF)
+
+if(NOT ${SONARQUBE_SOURCE_DIRS_FILE} MATCHES "none")
+  file(APPEND ${SONARQUBE_SOURCE_DIRS_FILE} "${PROJECT_NAME};${PROJECT_SOURCE_DIR} ")
+endif()
+
+if(NOT ${TEST_COVERAGE_PACKAGES_FILE} MATCHES "none")
+  file(APPEND ${TEST_COVERAGE_PACKAGES_FILE} "${PROJECT_NAME} ")
 endif()
 
 if(TEST_COVERAGE)
-	# Define a coverage target with some libs and executables to check
-	#	NAME 	Name of coverage target. Default: coverage. Only works with default currently.
-	#	TARGETS Library and executable targets for which coverage reports are requested.
-	add_coverage_gcov(NAME coverage
-					  TARGETS subscriber_lambda)
+  # Set build type to debug to avoid compiler optimization when checking coverage
+  set(CMAKE_BUILD_TYPE Debug)
+  # Include coverage report related functions
+  list(APPEND CMAKE_MODULE_PATH "/usr/lib/cmake/CodeCoverage")
+  include(CodeCoverage)
+  # Append compiler flags to gcc for generating coverage notes
+  APPEND_COVERAGE_COMPILER_FLAGS()
+  # Set coverage output dir to ${CMAKE_BINARY_DIR}/test_coverage
+  SET_COVERAGE_OUTPUT_DIR()
+endif()
+
+if(TEST_COVERAGE)
+  # Define a coverage target with some libs and executables to check
+  #	NAME 	Name of coverage target. Default: coverage. Only works with default currently.
+  #	TARGETS Library and executable targets for which coverage reports are requested.
+  add_coverage_gcov(NAME coverage
+			              TARGETS subscriber_lambda)
 endif()
