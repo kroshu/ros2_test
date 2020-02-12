@@ -9,6 +9,7 @@ os:
 branches:
   only:
   - ci
+  - master
 
 # include the following block if the C/C++ build artifacts should get cached by Travis,
 # CCACHE_DIR needs to get set as well to actually fill the cache
@@ -44,7 +45,7 @@ notifications:
 
 # clone and run industrial_ci
 install:
-  - git clone --quiet --depth 1 https://github.com/kroshu/industrial_ci.git .industrial_ci
+  - git clone --quiet --depth 1 --branch devel https://github.com/kroshu/industrial_ci.git .industrial_ci
   - curl "https://raw.githubusercontent.com/davetcoleman/roscpp_code_format/master/.clang-format" -o .clang-format
 script:
 - .industrial_ci/travis.sh
